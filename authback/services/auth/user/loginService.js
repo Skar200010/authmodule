@@ -1,4 +1,5 @@
 const User = require('../../../models/user')
+const Utils = require('./utils')
 const loginService = async (bodyData) => {
 
     try {
@@ -9,10 +10,10 @@ const loginService = async (bodyData) => {
             return { success: false, message: 'User not found' };
         }
 
-        const isPasswordMatch = await loginUtil.comparePassword(password, user.password);
+        const isPasswordMatch = await Utils.comparePassword(password, user.password);
 
         if (isPasswordMatch) {
-            const token = await loginUtil.generateToken(user._id, user.username);
+            const token = await Utils.generateToken(user._id, user.username);
             
             await User.findByIdAndUpdate(user._id, { $set: { token, status: true } });
 
@@ -25,3 +26,7 @@ const loginService = async (bodyData) => {
         throw new Error('Authentication failed');
     }
 };
+
+module.exports = {
+    loginService,
+}

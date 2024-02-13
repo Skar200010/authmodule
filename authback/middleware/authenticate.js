@@ -15,9 +15,10 @@ const authenticateToken = async (req, res, next) => {
     const userId = tokenData.id;
 
     const user = await User.findById(userId);
-if (!user || !user.tokens || user.tokens.every(savedToken => savedToken.token !== token) || user.status !== true) {
-  return res.status(401).json({ error: 'Unauthorized: Token is inactive or invalid' });
-}
+
+    if (!user || user.token !== token || user.status !== true) {
+      return res.status(401).json({ error: 'Unauthorized: Token is inactive or invalid' });
+    }
 
     req.userId = userId;
     next();

@@ -1,9 +1,12 @@
-
+const {loginService} = require('../services/auth/user/loginService')
+const {registerService} = require('../services/auth/user/registerService')
+const {logoutService} = require('../services/auth/user/logoutService')
+const {profileService} = require('../services/auth/user/profileService')
 
 exports.register = async (req, res, next) => {
 
     try {
-      const data = await registerService (req.body) 
+      const data = await registerService(req.body) 
      
       return res.json(data)
   
