@@ -10,6 +10,7 @@ import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
 import Link from '@mui/joy/Link';
+import { useNavigate } from 'react-router-dom';
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
@@ -60,7 +61,7 @@ export default function LoginPage() {
     persistent: false,
   });
   const [showPassword , setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -74,8 +75,14 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post('http://localhost:3000/login', formData);
+      const data = response.data;
 
-      console.log('Login successful!', response.data);
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        navigate('/profile');
+      } else {
+        console.error('Login failed:', data.message);
+      }
     } catch (error) {
       console.error('Login failed:', error.message);
     }
